@@ -8,7 +8,7 @@
   // Metadata
   title: "Phase-Aware Signal Processing",
   subtitle: "Theory and Practice",
-  author: "Leo Traußnigg",
+  author: "Max Mustermann",
   supervisors: (
     "Prof. Dr. Max Mustermann",
     "Dipl.-Ing. Jane Doe"

@@ -135,18 +135,18 @@
   show heading.where(level: 1): it => {
     pagebreak(weak: true)
     v(1cm)
-    place(right + top, dx: 2.6cm, dy: -0cm, image("graphics/chapterBacking-eps-converted-to.pdf", width: 15cm))
-    v(3cm)
+    place(right + top, dx: 2.6cm, dy: -0cm, image("graphics/chapterBacking-eps-converted-to.pdf", width: 12cm))
+    v(2.5cm)
     grid(
       columns: (1fr, auto),
       align(left + bottom)[
-         #set text(font: "", weight: "bold", size: 22pt, fill: black)
+         #set text(weight: "bold", size: 22pt, fill: black)
          #it.body
       ],
       place(
         right + top, 
         dx: 0cm, dy: -3.2cm,
-        text(font: "", size: 80pt, weight: "bold", fill: black.lighten(0%))[
+        text(size: 80pt, weight: "bold", fill: black.lighten(0%))[
           #if it.numbering != none { counter(heading).display() }
         ]
       )
@@ -157,7 +157,7 @@
 
   show heading.where(level: 2): it => {
     v(0.5cm)
-    text(font: "", size: 14pt, weight: "bold", fill: black, it)
+    text(size: 14pt, weight: "bold", fill: black, it)
     v(0.2cm)
   }
 
@@ -179,27 +179,32 @@
     
     set text(font: ("Latin Modern Roman"), fill: white)
     //set page(margin: (left: 1cm, right: 1cm, top: 2cm, bottom: 3.5cm))
-    v(1cm)
-    table(
-    columns: (1fr, 1fr), align(center)[#image("graphics/company_logo-eps-converted-to.pdf", width: 7.5cm))], align(right)[#image("graphics/FHJ-EE_flat.pdf", width: 7.5cm))],) //  stroke: none
 
-    place(bottom+right, dx: 3cm, dy: 2.5cm,
+    table(
+      columns: (1fr, 1fr), 
+      align: (center + horizon, center + horizon),
+      stroke: none,
+      image("graphics/company_logo-eps-converted-to.pdf", width: 7cm),
+      image("graphics/FHJ-EE_flat.pdf", width: 7cm)
+    )
+
+    place(bottom+right, dx: 3cm, dy: 3cm,
       img)
     
-    v(2cm)
+    v(1fr)
         
     align(right)[
-      #text(size: 24pt, weight: "bold", font: "")[#title]
+      #text(size: 28pt, weight: "bold")[#title]
       #if subtitle != none {
         parbreak()
-        text(size: 16pt, weight: "regular")[#subtitle]
+        text(size: 20pt, weight: "regular")[#subtitle]
       }
     ]
 
     v(1fr)
 
     align(right)[
-      #text(size: 18pt, weight: "bold")[#meta.doc-type-text]
+      #text(size: 20pt, weight: "bold")[#meta.doc-type-text]
       
       #v(1em)
       
@@ -208,13 +213,13 @@
         #meta.thesis-line-one \
         #text(size: 16pt)[#meta.thesis-line-two]
       ] else [
-         // Report Layout
-         #meta.org-text \
-         FH JOANNEUM -- University of Applied Sciences, Austria
+        // Report Layout
+        #meta.org-text \
+        FH JOANNEUM -- University of Applied Sciences, Austria
       ]
     ]
 
-    v(2fr)
+    v(1fr)
 
     align(right)[
       *#if is-german [Autor] else [Author]* \
@@ -226,13 +231,14 @@
       #supervisors.join(", ")
     ]
 
-    v(1cm)
+    v(0.5fr)
     align(right)[
       #meta.location, #date.display("[month repr:long] [year]")
     ]
     
     pagebreak()
   }
+
 
   // ==========================================================
   // ACKNOWLEDGMENTS (New)
@@ -241,7 +247,7 @@
      set page(header: none, footer: none)
      v(1cm)
      align(right)[
-       #text(font: "", size: 22pt, weight: "bold")[
+       #text(size: 22pt, weight: "bold")[
          #if is-german [Danksagung] else [Acknowledgments]
        ]
      ]
