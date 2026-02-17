@@ -123,6 +123,7 @@ Here are the list examples from `chapterTwo.tex`:
 // ==========================================================
 = Discussion <ch:Discussion>
 This corresponds to `Discussion.tex`.
+Footnotes also work! #footnote(text("Test"))
 
 // ==========================================================
 // APPENDICES
@@ -162,6 +163,10 @@ int main()
 ```
 
 = Citations 
-(Appendix B) Creating your own bibliography is important. In Typst, you link a .bib file at the end of the document.
+(Appendix B) Creating your own bibliography is important. In Typst, you link a .bib file at the end of the document. And reference entries using `#cite(key)` where `key` is the citation key defined in your .bib file or just use the \@ syntax. For example, you could reference this:
+@CMayerEtAl2018 , also reference this: @Okorn2017 or this: @Prechtl2006
 
-// ========================================================== // BIBLIOGRAPHY // ========================================================== #bibliography("references.bib") // Ensure you have a references.bib file in the same folder.
+// ========================================================== 
+// BIBLIOGRAPHY 
+// ========================================================== 
+#bibliography("bib/ECEtempBib.bib") // Ensure you have a references.bib file in the same folder.
