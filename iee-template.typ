@@ -43,7 +43,7 @@
 
   // 1. Determine Organization Text and Location based on Program
   if program == PROGRAM_ECE {
-    data.org-text = if is-de { "Elektronik und Computer Engineering" } else { "Electronics and Computer Engineering" }
+    data.org-text = if is-de { "Elektronik und Computer Engineering" } else { "Electronics Engineering" }
     data.location = "Graz"
     data.degree-type = if is-de { "am Bachelor-Studiengang" } else { "at the bachelor's degree programme" }
   } else if program == PROGRAM_MEC {
@@ -91,6 +91,7 @@
   subtitle: none,
   author: "Author Name",
   supervisors: (), 
+  co-supervisors: (),
   program: PROGRAM_ECE, 
   language: "en", 
   doc-type: "thesis", 
@@ -173,12 +174,12 @@
   // TITLE PAGE
   // ==========================================================
   {
-    let img = image("graphics/bgGraphic-eps-converted-to.pdf", width: 140%, height: 100%)
+    let img = image("graphics/bgGraphic-eps-converted-to.pdf", width: 138%, height: 100%)
+    let pm = 0.25fr
 
     set page(header: none, footer: none, margin: (top:2cm, bottom: 2cm), background: none)
     
     set text(font: ("Latin Modern Roman"), fill: white)
-    //set page(margin: (left: 1cm, right: 1cm, top: 2cm, bottom: 3.5cm))
 
     table(
       columns: (1fr, 1fr), 
@@ -188,52 +189,44 @@
       image("graphics/FHJ-EE_flat.pdf", width: 7cm)
     )
 
-    place(bottom+right, dx: 3cm, dy: 3cm,
-      img)
-    
-    v(1fr)
+    place(bottom+right, dx: 3cm, dy: 2.5cm, img)
         
     align(right)[
+      #v(0.7fr)
       #text(size: 28pt, weight: "bold")[#title]
       #if subtitle != none {
-        parbreak()
-        text(size: 20pt, weight: "regular")[#subtitle]
+        v(0.1fr)
+        text(size: 22pt, weight: "regular")[#subtitle]
       }
-    ]
-
-    v(1fr)
-
-    align(right)[
-      #text(size: 20pt, weight: "bold")[#meta.doc-type-text]
+      #v(pm)
+            #text(size: 18pt, weight: "bold")[#meta.doc-type-text]
+      #v(pm)
+      #text(size: 18pt, weight: "bold")[#author]
+      #v(pm)
       
       #v(1em)
       
       #if doc-type == "thesis" [
-        #if is-german [eingereicht] else [submitted] \
-        #meta.thesis-line-one \
-        #text(size: 16pt)[#meta.thesis-line-two]
+        #text(size: 14pt)[#meta.thesis-line-one]
+        #v(0.075fr)
+        #text(size: 14pt)[#meta.thesis-line-two]
       ] else [
         // Report Layout
-        #meta.org-text \
-        FH JOANNEUM -- University of Applied Sciences, Austria
+        #text(size: 14pt)[#meta.org-text]
+        #text(size: 14pt)[FH JOANNEUM -- University of Applied Sciences, Austria]
       ]
-    ]
+      #v(pm)
+      #text(size: 18pt, weight: "bold")[#if is-german [Betreuer:] else [Supervision:]]
+      #v(0.1fr)
+      #text(size: 12pt)[#supervisors.join("\n ")]
+      #v(pm)
+      #text(size: 18pt, weight: "bold")[#if is-german [Firmen-Betreuer:] else [Co-Supervision:]]
+      #v(0.1fr)
+      #text(size: 12pt)[#co-supervisors.join("\n ")]
+      #v(0.7fr)
 
-    v(1fr)
-
-    align(right)[
-      *#if is-german [Autor] else [Author]* \
-      #author
-      
-      #v(1em)
-      
-      *#if is-german [Betreuer] else [Supervisor]* \
-      #supervisors.join(", ")
-    ]
-
-    v(0.5fr)
-    align(right)[
-      #meta.location, #date.display("[month repr:long] [year]")
+      #text(size: 14pt, weight: "bold")[#meta.location, #date.display("[day]. [month repr:long] [year]")]
+      #v(0.5fr) 
     ]
     
     pagebreak()

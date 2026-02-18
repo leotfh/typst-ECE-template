@@ -6,9 +6,9 @@
 
 #show: doc => iee-thesis(
   // Metadata
-  title: "Phase-Aware Signal Processing",
-  subtitle: "Theory and Practice",
-  author: "Max Mustermann",
+  title: "Your Thesis Title",
+  subtitle: "Optional Subtitle",
+  author: "Forename Surename",
   supervisors: (
     "Prof. Dr. Max Mustermann",
     "Dipl.-Ing. Jane Doe"
