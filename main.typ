@@ -35,12 +35,7 @@
   doc
 )
 
-// ==========================================================
-// CHAPTER 1: Introduction
-// ==========================================================
-= Introduction <ch:Introduction>
-// Content from Introduction.tex
-This chapter corresponds to `Introduction.tex`. You can write your introduction here.
+#include "chapters/introduction.typ"
 
 // ==========================================================
 // CHAPTER 2: Methods
@@ -96,7 +91,7 @@ Since Typst cannot compile `.tex` files directly, you should export your TikZ fi
   rect(width: 80%, height: 5cm, fill: luma(240))[
     #align(center+horizon)[*Placeholder for TikZ Figure 3.7*]
   ],
-  caption: [Spectrogram consistency concept used in Griffin-Lim iterative signal reconstruction.]
+  caption: [Spectrogram consistency concept]
 ) <figExOne>
 
 == List Structures
@@ -146,27 +141,29 @@ $
 == Program Code / Listing
 Three types of source codes are supported. Here is a C-code example (Listing 1.1 in your files):
 
-```c
-#include <stdio.h>
-#define N 10
+#figure(
+  kind: raw,
+  caption: [Example C Code],
+  ```c
+  #include <stdio.h>
+  #define N 10
 
-int main()
-{
-  int i;
-  puts("Hello world!");
-  for (i = 0; i < N; i++)
+  int main()
   {
-    puts("Typst is also great for programmers!");
+    int i;
+    puts("Hello world!");
+    for (i = 0; i < N; i++)
+    {
+      puts("Typst is also great for programmers!");
+    }
+    return 0;
   }
-  return 0;
-}
-```
+  ```
+)
+
+
 
 = Citations 
 (Appendix B) Creating your own bibliography is important. In Typst, you link a .bib file at the end of the document. And reference entries using `#cite(key)` where `key` is the citation key defined in your .bib file or just use the \@ syntax. For example, you could reference this:
 @CMayerEtAl2018 , also reference this: @Okorn2017 or this: @Prechtl2006
 
-// ========================================================== 
-// BIBLIOGRAPHY 
-// ========================================================== 
-#bibliography("bib/ECEtempBib.bib") // Ensure you have a references.bib file in the same folder.

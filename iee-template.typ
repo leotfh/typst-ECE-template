@@ -85,6 +85,17 @@
   return data
 }
 
+#let overlay(img, color) = context {
+  let m = measure(img)
+  stack(
+    img,
+    move(
+      dy: -m.height,
+      box(width: m.width, height: m.height, fill: color)
+    )
+  )
+}
+
 // --- The Main Template Function ---
 #let iee-thesis(
   title: "Thesis Title",
@@ -118,43 +129,52 @@
       let page-num = counter(page).get().first()
       if page-num > 1 {
         set text(size: 9pt)
+        let prior-headings = query(selector(heading.where(level: 1)).before(here()))
+        let chapter-title = if prior-headings.len() > 0 { prior-headings.last().body } else { "" }
+        line(length: 100%, stroke: 0.5pt)
         grid(
           columns: (1fr, 1fr),
-          align(left, if calc.even(page-num) { title } else { "" }),
-          align(right, if calc.odd(page-num) { title } else { "" })
+          inset: (x:0pt, y: -4pt),
+          align(left, text(style: "italic", if calc.even(page-num) { title } else { chapter-title })),
+          align(right, text(style: "italic", if calc.even(page-num) { chapter-title } else { title }))
         )
         line(length: 100%, stroke: 0.5pt)
       }
     },
     footer: context {
       line(length: 100%, stroke: 0.5pt)
-      align(center, counter(page).display("1"))
+      v(-8pt)
+      align(center, counter(page).display())
+      v(-8pt)
+      line(length: 100%, stroke: 0.5pt)
     }
   )
   
+  let bgimage = overlay(image("graphics/chapterBacking-eps-converted-to.pdf"), white.transparentize(50%))
+  
   // --- 2. Heading Styling ---
-  show heading.where(level: 1): it => {
-    pagebreak(weak: true)
-    v(1cm)
-    place(right + top, dx: 2.6cm, dy: -0cm, image("graphics/chapterBacking-eps-converted-to.pdf", width: 12cm))
-    v(2.5cm)
-    grid(
-      columns: (1fr, auto),
-      align(left + bottom)[
-         #set text(weight: "bold", size: 22pt, fill: black)
-         #it.body
-      ],
-      place(
-        right + top, 
-        dx: 0cm, dy: -3.2cm,
-        text(size: 80pt, weight: "bold", fill: black.lighten(0%))[
-          #if it.numbering != none { counter(heading).display() }
-        ]
+  
+    show heading.where(level: 1): it => {
+      pagebreak(weak: true)
+      place(right + top, dx: 2.6cm, dy: 0cm, bgimage)
+      v(4.5cm)
+      grid(
+        columns: (1fr, auto),
+        align(left + bottom)[
+          #set text(weight: "bold", size: 24pt, fill: black)
+          #set align(right)
+          #it.body
+        ],
+        place(
+          right + top, 
+          dx: 0cm, dy: -3.3cm,
+          text(font: "Arial", size: 70pt, weight: "bold", fill: black.lighten(0%))[
+            #if it.numbering != none { counter(heading).display() }
+          ]
+        )
       )
-    )
-    //line(length: 100%, stroke: 2pt + den-col)
-    v(1cm)
-  }
+      v(1cm)
+    }
 
   show heading.where(level: 2): it => {
     v(0.5cm)
@@ -232,7 +252,6 @@
     pagebreak()
   }
 
-
   // ==========================================================
   // ACKNOWLEDGMENTS (New)
   // ==========================================================
@@ -249,7 +268,6 @@
      pagebreak()
   }
 
-
   // ==========================================================
   // DECLARATION
   // ==========================================================
@@ -258,7 +276,7 @@
     v(2cm)
     
     if is-german {
-       align(right, text(size: 22pt, weight: "bold", font: "")[Eidesstattliche Erklärung])
+       align(right, text(size: 22pt, weight: "bold", )[Eidesstattliche Erklärung])
        v(1cm)
        [Der:Die Verfasser:in dieser Arbeit ist verpflichtet, den jeweils aktuellen Wortlaut der Eidesstattlichen Erklärung eigenständig über die Webseite der FH JOANNEUM abzurufen:]
        v(0.5cm)
@@ -267,22 +285,35 @@
        v(1cm)
        text(weight: "bold")[Dieser Text ist vor Abgabe vollständig durch die aktuelle Eidesstattliche Erklärung zu ersetzen.]
     } else {
-       align(right, text(size: 22pt, weight: "bold", font: "")[Declaration of Honour])
+       align(right, text(size: 22pt, weight: "bold", )[Declaration of Honour])
        v(1cm)
        [The author of this thesis is responsible for obtaining the most recent and valid version of the Obligatory Declaration from the official FH JOANNEUM website:]
        v(0.5cm)
-       align(center)[https://www.fh-joanneum.at/en/university/teaching-and-research/]
-       [The accuracy, completeness and up-to-date adoption of the official wording is the sole responsibility of the submitting student.] 
+       align(center)[
+        https://www.fh-joanneum.at/en/university/teaching-and-research/ \
+        ]
+        v(0.5cm)
+        [
+        - Important Documents \
+		    - Obligatory signed declaration
+        ]
+        v(0.5cm)
+       [The accuracy, completeness and up-to-date adoption of the official wording is the sole responsibility of the submitting student. The use of outdated, modified or incomplete versions will result in the thesis being considered non-compliant and may lead to a negative assessment.]
        v(1cm)
        text(weight: "bold")[This placeholder text must be fully replaced with the current official Obligatory Declaration prior to submission.]
     }
     pagebreak()
   }
 
+set page(numbering: "I")
+counter(page).update(1)
+
   // ==========================================================
   // ABSTRACTS
   // ==========================================================
-  
+{
+  set page(header: none, footer: none)
+
   if abstract-de != none {
     heading(level: 1, numbering: none, outlined: false)[Kurzfassung]
     abstract-de
@@ -294,19 +325,90 @@
     abstract-en
     pagebreak()
   }
+}
 
   // ==========================================================
   // TABLE OF CONTENTS
   // ==========================================================
-  set page(numbering: "I")
-  counter(page).update(1)
-  
-  show outline.entry.where(level: 1): it => {
-    v(18pt, weak: true)
-    strong(it)
+{
+  show outline.entry: it => {
+    context {
+      let page-num = str(counter(page).at(it.element.location()).first())
+      let num-label = if it.element.numbering != none {
+        numbering(it.element.numbering, ..counter(heading).at(it.element.location()))
+      } else { "" }
+
+      if it.level == 1 {
+        v(1.2em)
+      } else {
+        v(0.5em)
+      }
+
+      grid(
+        columns: (auto, 10fr, auto),
+        align: (left+bottom, center+bottom, right+bottom),
+        gutter: 10pt,
+        // Number + Title (bigger for level 1)
+        if it.level == 1 {
+          strong(text(fill: den-col, size: 16pt)[#num-label#h(15pt)#it.element.body])
+        } else {
+          text(size: 12pt)[#h(it.level * 1em)#num-label #h(5pt) #it.element.body]
+        },
+        // Dot leaders
+        if it.level == 1 {
+          text(fill: den-col.lighten(25%))[#repeat(gap: 5pt)[.]]
+        } else {
+          text(fill: black.lighten(25%))[#repeat(gap: 5pt)[.]]
+        },
+        // Page number
+        if it.level == 1 {
+          strong(text(fill: den-col)[#page-num])
+        } else {
+          text()[#page-num]
+        },
+      )
+
+    }
   }
-  
-  outline(depth: 3, indent: auto)
+
+  outline(depth: 3, indent: 2.2em)
+  pagebreak()
+}
+
+  show outline.entry: it => {
+    context {
+      let page-num = str(counter(page).at(it.element.location()).first())
+      let num-label = if it.element.numbering != none {
+        it.element.caption.supplement + " " + it.element.caption.numbering + it.element.caption.separator
+      } else { "" }
+        v(4pt, weak: true)
+        grid(
+          columns: (auto, 1fr, auto),
+          align: (left + horizon, left + horizon, right + horizon),
+          column-gutter: 4pt,
+          text()[#h(it.level * 1em)#strong(num-label)#h(4pt)#it.element.caption.body],
+          text(fill: black.lighten(25%))[#repeat(gap: 8.5pt)[.]],
+          strong(text()[#page-num]),
+        )
+    }
+  }
+
+  outline(
+  title: [List of Figures],
+  target: figure.where(kind: image),
+  )
+  pagebreak()
+
+  outline(
+      title: [List of Tables],
+  target: figure.where(kind: table),
+  )
+  pagebreak()
+
+  outline(
+      title: [List of Code Snippets],
+  target: figure.where(kind: raw),
+  )
   pagebreak()
 
   // ==========================================================
@@ -317,4 +419,10 @@
   set heading(numbering: "1.1")
 
   body
+
+  // ========================================================== 
+  // BIBLIOGRAPHY 
+  // ========================================================== 
+  show bibliography: set heading(numbering: "A.1")
+  bibliography("bib/ECEtempBib.bib", style: "ieee") // Ensure you have a references.bib file in the same folder.
 }
