@@ -1,7 +1,7 @@
 > [!WARNING]
 > This is still WIP, feel free to open issues or PRs!
 # typst-ECE-template
-This Typst template is intended for writing a bachelors thesis at the Electronic Engineering departement at FH JOANNEUM.
+This Typst template is intended for writing a bachelors thesis at the Electronic Engineering departement at FH JOANNEUM. Lab reports and master thesis options might be added later.
 
 ## Getting Started
 - Clone this repository: `git clone https://github.com/leotfh/typst-ECE-template`
