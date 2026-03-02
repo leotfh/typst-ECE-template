@@ -10,6 +10,8 @@ This Typst template is intended for writing a bachelors thesis at the Electronic
 - Edit `main.typ` to fit your needs
 Now you should be able to preview the document.
 
+![Template preview](thumbnail.png)
+
 ## References
 - Florian Mayer's LaTeX template: https://github.com/Electronic-and-Computer-Engineering/IEETemplate
 - Another Typst template used at the IIT Institute: https://git-iit.fh-joanneum.at/oss/thesis-template/-/blob/main/template/thesis.typ?ref_type=heads
