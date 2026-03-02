@@ -6,7 +6,7 @@ This Typst template is intended for writing a bachelors thesis at the Electronic
 ## Getting Started
 - Clone this repository: `git clone https://github.com/leotfh/typst-ECE-template`
 - Install VSCode
-- Install the TinyMist extension for VSCode
+- Install the [TinyMist](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) extension for VSCode (provides preview, PDF rendering and linting capabilities)
 - Edit `main.typ` to fit your needs
 Now you should be able to preview the document.
 
