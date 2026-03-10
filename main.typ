@@ -18,6 +18,7 @@
   program: PROGRAM_ECE, 
   language: "en", // "en" or "de"
   doc-type: "thesis", // "thesis" or "report"
+  show-list-of: ("figures"),
   
   // Content from abstract.tex and acknowledgments.tex
   abstract-de: [
@@ -120,6 +121,10 @@ Here are the list examples from `chapterTwo.tex`:
 This corresponds to `Discussion.tex`.
 Footnotes also work! #footnote(text("Test"))
 
+== Citations 
+Creating your own bibliography is important. In Typst, you link a .bib file at the end of the document. And reference entries using `#cite(key)` where `key` is the citation key defined in your .bib file or just use the \@ syntax. For example, you could reference this:
+@CMayerEtAl2018 , also reference this: @Okorn2017 or this: @Prechtl2006
+
 // ==========================================================
 // APPENDICES
 // ==========================================================
@@ -161,9 +166,13 @@ Three types of source codes are supported. Here is a C-code example (Listing 1.1
   ```
 )
 
+== Tables
+
+#figure(
+  fhjtable(tabledata: csv("data/book1.csv", delimiter: ";"), columns: (auto, 1fr, 1fr, 1fr)), 
+  caption: [Example Table]
+)
 
 
-= Citations 
-(Appendix B) Creating your own bibliography is important. In Typst, you link a .bib file at the end of the document. And reference entries using `#cite(key)` where `key` is the citation key defined in your .bib file or just use the \@ syntax. For example, you could reference this:
-@CMayerEtAl2018 , also reference this: @Okorn2017 or this: @Prechtl2006
-
+#pagebreak()
+#bibliography("bib/ECEtempBib.bib", style: "ieee")
