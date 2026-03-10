@@ -8,6 +8,7 @@ This Typst template is intended for writing a bachelors thesis at the Electronic
 - Install VSCode
 - Install the [TinyMist](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) extension for VSCode (provides preview, PDF rendering and linting capabilities)
 - Edit `main.typ` to fit your needs
+- Kind of optional, but installing the "Latin Modern Roman" font is recommended to get the original look of the IEE LaTeX template.
 Now you should be able to preview the document.
 
 ## References
