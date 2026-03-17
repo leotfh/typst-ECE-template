@@ -22,18 +22,6 @@
 #let PROGRAM_STM = "STM" // Master
 #let PROGRAM_EEM = "EEM" // Master (English only usually)
 
-// --- Helper: Blue Box (mdframed equivalent) ---
-#let blue-box(body) = {
-  block(
-    fill: rgb(245, 245, 245), // black!5
-    stroke: (left: 5pt + den-col.lighten(45%)), // Line color
-    inset: 20pt,
-    radius: 4pt, // Approximating roundcorner
-    width: 100%,
-    body
-  )
-}
-
 // ******************
 // Helper functionality: todo / quote / fhjcode / textit / textbf / fhjtable / ...
 // ******************
@@ -419,7 +407,7 @@ long }
   }
 
   show heading.where(level: 1): it => hang_head(it, 20pt, above: 28pt, below: 25pt)
-  show heading.where(level: 2): it => hang_head(it, 16pt, above: 20pt, below: 20pt)
+  show heading.where(level: 2): it => hang_head(it, 16pt, above: 10pt, below: 15pt)
   show heading.where(level: 3): it => hang_head(it, 13pt, above: 15pt, below: 15pt)
 
   {
