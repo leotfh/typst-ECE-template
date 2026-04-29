@@ -1,4 +1,4 @@
-#import "lib.typ"
+#import "../helpers/lib.typ": fhjtable, fhjcode  
 
 // ==========================================================
 // CHAPTER 2: Methods
@@ -33,3 +33,46 @@ $
   &+ sum_(h=1)^H A_h / A_bar(h) bb(E)(e^(-j(phi_h + phi_bar(h)))) W(e^(j(omega_bar(h) + omega_h))) \
   &+ 1 / (pi A_bar(h)) bb(E)(e^(-j phi_bar(h))) D_w (e^(j omega_bar(h)))
 $
+
+#figure(fhjtable(
+  tabledata: "A,B,C\n1,2,3\n4,5,6\n7,8,9",
+  columns: 3,
+), caption: "Example Table")
+
+#pagebreak()
+
+= Draw graphics using TikZ & other fancy stuff
+
+TikZ and PGF are TeX packages. In Typst, we usually use the `cetz` package or import images.
+
+== TikZ Examples
+Since Typst cannot compile `.tex` files directly, you should export your TikZ figures to PDF or SVG and import them like this:
+
+#figure(
+  // image("figures/figure3_7.svg", width: 80%),
+  rect(width: 80%, height: 5cm, fill: luma(240))[
+    #align(center+horizon)[*Placeholder for TikZ Figure 3.7*]
+  ],
+  caption: [Spectrogram consistency concept]
+) <figExOne>
+
+== List Structures
+Here are the list examples from `chapterTwo.tex`:
+
+=== Itemize (Bullet List)
+- First item
+- Second item
+- Third item
+
+=== Enumerate (Numbered List)
++ First item
++ Second item
++ Third item
+
+=== Nested Lists
++ The first item
+  + Nested item 1
+  + Nested item 2
++ The second item
+
+#pagebreak()

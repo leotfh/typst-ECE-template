@@ -7,7 +7,7 @@
 
 // See https://github.com/typst/packages/tree/main/packages/preview/glossarium
 #import "@preview/glossarium:0.5.10": make-glossary, register-glossary, print-glossary, gls, glspl
-#import "chapters/glossary-definitions.typ": gls-entries
+#import "helpers/glossary-definitions.typ": gls-entries
 
 // --- Colors defined in IEEconfig.sty ---
 #let den-col = rgb(35, 171, 196)
@@ -32,131 +32,6 @@
 #let in-outline = state("in-outline", false)
 #let flex-caption(long, short) = context if in-outline.get() { short } else {
 long }
-
-#let todo(term, color: red) = {
-  text(color, box[#term])
-}
-#let quote(message, by) = {
-  // #let fb_quote(message,by) = {
-  block(radius: 1em, width: 90%, inset: (x: 2em, y: 0.5em), [
-    #set align(left)
-    #set text(style: "italic")
-    #message
-    #v(0.1em)
-    #set align(right)
-    #text(size: 10pt, [
-      #by
-    ])
-  ])
-}
-
-#let directquote(it, bibkey:label, supplement:none, delimiter:["],enddelimiter:none) = {
-  if enddelimiter == none{ enddelimiter = delimiter}
-  [#delimiter#it#enddelimiter #cite(bibkey, supplement: supplement)]
-}
-
-// inspired by: https://github.com/typst/typst/issues/344
-#let fhjcode(code: "", language: "python", firstline: 0, lastline: -1, textsize: 11pt) = {
-  // Custom layout for raw code
-  // with line numbering
-  show raw.where(block: true, lang: "trimmed_code"): it => {
-    //
-    // shorten the source code if firstline and/or lastline are specified
-    //
-    let theCode = it.text // contents -> string
-    let lines = theCode.split("\n")
-    let fromLine = if firstline > lines.len() { lines.len() } else { firstline };
-    let toLine = if lastline > lines.len() { lines.len() } else { lastline };
-    lines = lines.slice(fromLine, toLine)
-    set text(size: textsize)
-    show raw.line: it => {
-        text(fill: gray)[#it.number]
-        h(1em)
-        if language=="console"{
-          show regex("^#.*"): set text(weight: "bold" )
-          show regex("^>.*"): set text(weight: "bold" )
-          text(fill:black,style: "normal", it.body)
-        }else{
-          it.body
-        }
-    }
-    let txt = lines.join("\n")
-    if txt != none {
-      let r = raw(txt, lang: language)
-      block(
-          radius: 0.5em, fill: luma(240),
-          width: 100%, inset: (x: 0.7em, y: 0.5em),
-          r
-        )
-    }else{
-      todo("Err: Use arguments 'firstline' and 'lastline' to specify a non-empty part of source code.")
-    }
-  }
-  set text(size: 11pt)
-
-  // we use here INTERNAL lang parameter "trimmed_python"
-  // which supports trimming (see: show  raw.where(...) )
-  raw(code, block: true, lang: "trimmed_code")
-}
-
-// macros to emphasise / italic / boldface in a specific way
-// e.g. invent your own styles for tools/commands/names/...
-
-#let textit(it) = [
-  #set text(style: "italic")
-  #h(0.1em, weak: true)
-  #it
-  #h(0.3em, weak: true)
-]
-
-#let textbf(it) = [
-  #set text(weight: "semibold")
-  #h(0.1em, weak: true)
-  #it
-  #h(0.2em, weak: true)
-]
-
-// Create a table from csv,
-//   render first line bold,
-//   use alternating line colors
-#let fhjtable(
-  tabledata: "",
-  columns: 1,
-  header-row: gray.lighten(60%),
-  even-row: rgb(255, 255, 255),
-  odd-row: rgb(228, 234, 250),
-  align: (col, row) => if row == 0 { center } else { left },
-  inset: 1em
-) = {
-  let tableheadings = tabledata.first()
-  let data = tabledata.slice(1).flatten()
-  table(
-    columns: columns,
-    
-    fill: (_, row) =>
-      if row == 0 {
-        header-row // color for header row
-      } else if calc.odd(row) {
-        odd-row // each other row colored
-      } else {
-        even-row
-    },
-    inset: inset,
-    align: align, // (col, row) => if row == 0 { center } else { left },
-    ..tableheadings.map(x => [*#x*]), // bold headings
-    ..data,
-  )
-}
-
-// Optionally, during review process you might want to
-// highlight changed text blocks with #fhjrevisionmark([ ... ]):
-// Revision Mark
-#let fhjrevisionmark(content) = block(
-  stroke: (right: 2pt + black.lighten(5%)),
-  inset: (right: 6pt),
-  content
-)
-
 
 // --- Helper: Get Degree Meta Data ---
 // Logic ported from titlepage.tex
@@ -288,7 +163,7 @@ long }
   // TITLE PAGE
   // ==========================================================
   {
-    let img = image("graphics/others/bgGraphic-eps-converted-to.pdf", width: 140%, height: 100%)
+    let img = image("assets/graphics/others/bgGraphic-eps-converted-to.pdf", width: 140%, height: 100%)
 
     set page(header: none, footer: none, margin: (top:2cm, bottom: 2cm), background: none)
     
@@ -298,8 +173,8 @@ long }
       columns: (1fr, 1fr), 
       align: (center + horizon, center + horizon),
       stroke: none,
-      image("graphics/logos/company_logo-eps-converted-to.pdf", width: 7cm),
-      image("graphics/logos/FHJ-EE_flat.pdf", width: 7cm)
+      image("assets/graphics/logos/company_logo-eps-converted-to.pdf", width: 7cm),
+      image("assets/graphics/logos/FHJ-EE_flat-eps-converted-to.pdf", width: 7cm)
     )
 
     place(bottom+right, dx: 3cm, dy: 3cm,
@@ -369,19 +244,37 @@ long }
   set math.equation(numbering: (..n) => strong(numbering("(1)", ..n)))
 
   // --- Code Block Styling ---
-  show raw.where(block: true): block.with(
-    fill: luma(245),
-    inset: 10pt,
-    radius: 2pt,
-    stroke: (left: 4pt + den-col)
-  )
+  show raw.where(block: true): it => {
+    let num-width = if it.lines.len() < 100 { 1.8em } else { 2.5em }
+    show raw.line: line => {
+      box(width: num-width, align(right, text(size: 1em, fill: luma(150))[#line.number]))
+      h(1.5em)
+      line.body
+    }
+    block(
+      fill: luma(245),
+      inset: 10pt,
+      radius: 2pt,
+      stroke: (left: 4pt + den-col),
+      it
+    )
+  }
+  show figure.where(
+  kind: raw
+): set figure.caption(position: top)
 
   //add more vertical space between text and start of figures
-  show figure: set block(inset: (top: 1em))
+  show figure: set block(inset: (top: 0.5em))
+
+  set figure(gap: 1.5em)
   
   show figure.caption: it => text(
     [*#it.supplement #it.counter.display(it.numbering):* #it.body]
-)
+  )
+
+  show figure.caption: it => text(
+    [*#it.supplement #it.counter.display(it.numbering):* #it.body]
+  )
 
   set align(left) // align text left (i.e. no longer centered)
 
@@ -425,11 +318,11 @@ long }
     // ==========================================================
   
     heading(outlined: false, numbering: none, "Eidesstattliche Erklärung")
-    include "chapters/eidesstattliche_erklaerung.typ"
+    include "chapters/frontmatter/eidesstattliche_erklaerung.typ"
     pagebreak()
 
     heading(outlined: false, numbering: none, "Declaration of Honor")
-    include "chapters/declaration_of_honor.typ"
+    include "chapters/frontmatter/declaration_of_honor.typ"
     pagebreak()
   
 
@@ -468,7 +361,29 @@ long }
     
 
     show outline.entry.where(level: 1): it => {
-      text(size: 12pt, weight: "bold")[#it]
+      if it.element.func() == heading {
+        text(size: 12pt, weight: "bold")[#it]
+      } else if it.element.func() == figure {
+        let cap = it.element.caption
+        let fill = it.fill
+        context {
+          let pg = counter(page).at(it.element.location()).first()
+          let num = numbering(cap.numbering, ..cap.counter.at(it.element.location()))
+          block(
+            link(it.element.location(), text(fill: black)[*#cap.supplement #num:* #cap.body #if fill != none { box(width: 1fr, fill) } else { h(1fr) } #pg])
+          )
+        }
+      } else {
+        it
+      }
+    }
+    show outline.entry.where(level: 2): it => {
+      v(0.6cm, weak: true)
+      it
+    }
+    show outline.entry.where(level: 3): it => {
+      v(0.5cm, weak: true)
+      it
     }
     outline(
       title: [
@@ -524,11 +439,18 @@ long }
       pagebreak()
     }
 
+    if show-list-of.contains("glossary") {
+      if (language == "de") {
+        heading("Abkürzungsverzeichnis", numbering: none, outlined: false)
+      } else {
+        heading("Glossary", numbering: none, outlined: false)
+      }
     register-glossary(gls-entries)
 
     show: make-glossary
-    include "./chapters/glossary.typ"
+    include "helpers/glossary.typ"
     pagebreak()
+    }
 
     //
     // LIST of LISTINGS LoL
