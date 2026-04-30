@@ -23,15 +23,13 @@
   
   // Content from abstract.tex and acknowledgments.tex
   abstract-de: [
-    Hier sollte Ihre Zusammenfassung der Arbeit stehen! Dies ist der Platzhalter für die Kurzfassung.
+    #include "/chapters/frontmatter/abstract_de.typ"
   ],
   abstract-en: [
-    Please put the summary of your work here! This corresponds to the content of `abstract.tex`.
+    #include "/chapters/frontmatter/abstract_en.typ"
   ],
   acknowledgments: [
-    Thanks to... 
-    
-    Choose whatever suits you best. This corresponds to `acknowledgments.tex`.
+    #include "/chapters/frontmatter/acknowledgments.typ"
   ],
 
   doc
