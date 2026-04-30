@@ -6,7 +6,7 @@
 
 
 // See https://github.com/typst/packages/tree/main/packages/preview/glossarium
-#import "@preview/glossarium:0.5.10": make-glossary, register-glossary, print-glossary, gls, glspl
+#import "@preview/glossarium:0.5.10": make-glossary, register-glossary, gls, glspl
 #import "helpers/glossary-definitions.typ": gls-entries
 
 // --- Colors defined in IEEconfig.sty ---
@@ -236,12 +236,19 @@ long }
   set text(size: 11pt, font: ("Cambria"))
   set par(justify: true, leading: 1.1em, spacing: body-spacing)
 
-  set block(spacing: body-spacing, below: 20pt, above: 20pt)
+  set block(below: 20pt, above: 20pt)
   set list(body-indent: 12pt, indent: 20pt, spacing: auto)
 
   show link: set text(fill: den-col-dark)
-  set math.equation(numbering: "(1)")
-  set math.equation(numbering: (..n) => strong(numbering("(1)", ..n)))
+
+  // --- Per-chapter numbering for equations, figures, tables, listings ---
+  // Format: <chapter>.<n>  (e.g. 3.1) — restarts at every H1.
+  set math.equation(numbering: n => strong(
+    numbering("(1.1)", counter(heading.where(level: 1)).get().first(), n)
+  ))
+  set figure(numbering: n =>
+    numbering("1.1", counter(heading.where(level: 1)).get().first(), n)
+  )
 
   // --- Code Block Styling ---
   show raw.where(block: true): it => {
@@ -262,16 +269,15 @@ long }
   show figure.where(
   kind: raw
 ): set figure.caption(position: top)
+  show figure.where(
+  kind: table
+): set figure.caption(position: top)
 
   //add more vertical space between text and start of figures
   show figure: set block(inset: (top: 0.5em))
 
   set figure(gap: 1.5em)
   
-  show figure.caption: it => text(
-    [*#it.supplement #it.counter.display(it.numbering):* #it.body]
-  )
-
   show figure.caption: it => text(
     [*#it.supplement #it.counter.display(it.numbering):* #it.body]
   )
@@ -299,9 +305,21 @@ long }
     ]
   }
 
-  show heading.where(level: 1): it => hang_head(it, 20pt, above: 28pt, below: 25pt)
+  show heading.where(level: 1): it => {
+    pagebreak(weak: true)
+    // Reset per-chapter counters so figures, tables, listings and equations
+    // restart at 1 in every new chapter (matches Word ECE.dotm convention).
+    counter(figure.where(kind: image)).update(0)
+    counter(figure.where(kind: table)).update(0)
+    counter(figure.where(kind: raw)).update(0)
+    counter(math.equation).update(0)
+    hang_head(it, 20pt, above: 28pt, below: 25pt)
+  }
   show heading.where(level: 2): it => hang_head(it, 16pt, above: 10pt, below: 15pt)
   show heading.where(level: 3): it => hang_head(it, 13pt, above: 15pt, below: 15pt)
+  // Level 4: unnumbered emphasized heading (matches Word "Überschrift 4")
+  show heading.where(level: 4): set heading(numbering: none, outlined: false)
+  show heading.where(level: 4): it => hang_head(it, 12pt, above: 12pt, below: 14pt)
 
   {
     // No header and roman page number as footer only for preambles
@@ -319,29 +337,23 @@ long }
   
     heading(outlined: false, numbering: none, "Eidesstattliche Erklärung")
     include "chapters/frontmatter/eidesstattliche_erklaerung.typ"
-    pagebreak()
 
     heading(outlined: false, numbering: none, "Declaration of Honor")
     include "chapters/frontmatter/declaration_of_honor.typ"
-    pagebreak()
   
 
     // ==========================================================
     // ABSTRACTS
     // ==========================================================
-    
-    v(30pt)
+
     if abstract-de != none {
       heading(outlined: false, numbering: none, "Kurzfassung")
       abstract-de
-      pagebreak()
     }
-    
-    v(30pt)
+
     if abstract-en != none {
       heading(outlined: false, numbering: none, "Abstract")
       abstract-en
-      pagebreak()
     }
 
     // ==========================================================
@@ -352,7 +364,6 @@ long }
         [#if is-german [Danksagung] else [Acknowledgments]]
       )
       acknowledgments
-      pagebreak()
     }
 
     // ==========================================================
@@ -397,9 +408,6 @@ long }
     )
     pagebreak()
 
-    set align(left)
-    enum(numbering: "I.")
-
     //
     // LIST OF FIGURES (LoF)
     //
@@ -410,7 +418,6 @@ long }
         heading("List of Figures", numbering: none, outlined: false)
       }
       outline(title: none, target: figure.where(kind: image))
-      pagebreak()
     }
 
     //
@@ -423,7 +430,6 @@ long }
         heading("List of Tables", numbering: none, outlined: false)
       }
       outline(title: none, target: figure.where(kind: table))
-      pagebreak()
     }
 
     //
@@ -436,7 +442,6 @@ long }
         heading("List of Equations", numbering: none, outlined: false)
       }
       outline(title: none, target: figure.where(kind: math.equation))
-      pagebreak()
     }
 
     if show-list-of.contains("glossary") {
@@ -449,7 +454,6 @@ long }
 
     show: make-glossary
     include "helpers/glossary.typ"
-    pagebreak()
     }
 
     //
@@ -462,7 +466,6 @@ long }
         heading("List of Listings", numbering: none, outlined: false)
       }
       outline(title: none, target: figure.where(kind: raw))
-      pagebreak()
     }
   }
   // ==========================================================
