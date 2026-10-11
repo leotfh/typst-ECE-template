@@ -13,7 +13,7 @@ This Typst template is intended for writing a thesis or a lab report at the Elec
 - Edit `main.typ` to fit your needs
 - Kind of optional, but installing the "Latin Modern Roman" font is recommended to get the original look of the IEE LaTeX template. You can download it [here](https://www.gust.org.pl/projects/e-foundry/latin-modern/download)
 
-## Lab Report
+## Thesis
 
 To use this template for a thesis, these are the relevant settings:
 
@@ -22,7 +22,7 @@ To use this template for a thesis, these are the relevant settings:
   // Metadata
   title: "Your Thesis Title",
   subtitle: "Optional Subtitle",
-  author: "Forename Surename",
+  authors: ("Forename Surename"),
   supervisors: (
     "Prof. Dr. Max Mustermann",
     "Dipl.-Ing. Jane Doe"
@@ -49,7 +49,7 @@ To use this template for a thesis, these are the relevant settings:
 )
 ```
 
-## Thesis
+## Lab report
 
 To use this template for a thesis, these are the relevant settings:
 
