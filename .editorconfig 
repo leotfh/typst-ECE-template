@@ -1,0 +1,13 @@
+# Root EditorConfig file for the project
+root = true
+
+# Default rules for all files
+[*]
+indent_style = space
+indent_size = 2
+tab_width = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+#max_line_length = 120
