@@ -95,6 +95,7 @@ long }
   title: "Thesis Title",
   subtitle: none,
   author: "Author Name",
+  authors: none,
   supervisors: (), 
   program: PROGRAM_ECE, 
   language: "en", 
@@ -113,6 +114,7 @@ long }
   
   let meta = get-meta(program, doc-type, language)
   let is-german = (language == "de")
+  let author-list = if authors != none { authors } else { (author,) }
 
   // --- 1. Page Setup ---
   set page(
@@ -166,71 +168,108 @@ long }
     let img = image("assets/graphics/others/bgGraphic-eps-converted-to.pdf", width: 140%, height: 100%)
 
     set page(header: none, footer: none, margin: (top:2cm, bottom: 2cm), background: none)
-    
-    set text(font: ("Latin Modern Roman"), fill: white)
 
-    table(
-      columns: (1fr, 1fr), 
-      align: (center + horizon, center + horizon),
-      stroke: none,
-      image("assets/graphics/logos/company_logo-eps-converted-to.pdf", width: 7cm),
-      image("assets/graphics/logos/FHJ-EE_flat-eps-converted-to.pdf", width: 7cm)
-    )
+    if doc-type == "report" {
+      set text(font: ("Caladea"), fill: black)
+      set page(margin: (left: 2.5cm, right: 2.5cm, top: 4cm, bottom: 4cm))
 
-    place(bottom+right, dx: 3cm, dy: 3cm,
-      img)
-    
-    v(1fr)
-        
-    align(right)[
-      #text(size: 28pt, weight: "bold")[#title]
-      #if subtitle != none {
-        parbreak()
-        text(size: 18pt, weight: "regular")[#subtitle]
-      }
-    ]
-
-    v(1fr)
-
-    align(right)[
-      #text(size: 20pt, weight: "bold")[#meta.doc-type-text]
-      
-      #v(1em)
-      
-      #if doc-type == "thesis" [
-        #if is-german [eingereicht] else [submitted] \
-        #meta.thesis-line-one \
-        #text(size: 16pt)[#meta.thesis-line-two]
-      ] else [
-         // Report Layout
-         #meta.org-text \
-         FH JOANNEUM -- University of Applied Sciences, Austria
+      place(top + right)[
+        #image("assets/graphics/logos/FHJ-EE_flat-eps-converted-to.pdf", width: 7cm)
       ]
-    ]
 
-    v(1fr)
+      v(10cm)
 
-    align(right)[
-      *#if is-german [Autor] else [Author]* \
-      #author
+      align(center)[
+        #text(size: 20pt, weight: "bold")[#title]
+        #if subtitle != none {
+          parbreak()
+          v(32pt, weak: true)
+          text(size: 16pt, weight: "regular")[#subtitle]
+        }
+      ]
+
+      place(bottom + left, dx: 0cm, dy: 0.75cm)[
+        #block(width: 10cm)[
+          #for item in author-list {
+            if item != none and item != "" {
+              text(size: 11pt, weight: "regular")[#item]
+              linebreak()
+            }
+          }
+          #v(1em)
+          #if is-german {
+            text(size: 11pt)[#date.display("[day]. [month repr:long] [year]")]
+          } else {
+            text(size: 11pt)[#date.display("[month repr:long] [day], [year]")]
+          } 
+        ]
+      ]
+
+    } else {
+      set text(font: ("Latin Modern Roman"), fill: white)
+
+      table(
+        columns: (1fr, 1fr), 
+        align: (center + horizon, center + horizon),
+        stroke: none,
+        image("assets/graphics/logos/company_logo-eps-converted-to.pdf", width: 7cm),
+        image("assets/graphics/logos/FHJ-EE_flat-eps-converted-to.pdf", width: 7cm)
+      )
+
+      place(bottom+right, dx: 3cm, dy: 3cm,
+        img)
       
-      #v(1em)
-      
-      *#if is-german [Betreuer] else [Supervisor]* \
-      #supervisors.join(", ")
-    ]
+      v(1fr)
+          
+      align(right)[
+        #text(size: 28pt, weight: "bold")[#title]
+        #if subtitle != none {
+          parbreak()
+          text(size: 18pt, weight: "regular")[#subtitle]
+        }
+      ]
 
-    v(0.5fr)
-    align(right)[
-      #meta.location, #date.display("[month repr:long] [year]")
-    ]
+      v(1fr)
+
+      align(right)[
+        #text(size: 20pt, weight: "bold")[#meta.doc-type-text]
+        
+        #v(1em)
+        
+        #if doc-type == "thesis" [
+          #if is-german [eingereicht] else [submitted] \
+          #meta.thesis-line-one \
+          #text(size: 16pt)[#meta.thesis-line-two]
+        ] else [
+           // Report Layout
+           #meta.org-text \
+           FH JOANNEUM -- University of Applied Sciences, Austria
+        ]
+      ]
+
+      v(1fr)
+
+      align(right)[
+        *#if is-german [Autor] else [Author]* \
+        #author
+        
+        #v(1em)
+        
+        *#if is-german [Betreuer] else [Supervisor]* \
+        #supervisors.join(", ")
+      ]
+
+      v(0.5fr)
+      align(right)[
+        #meta.location, #date.display("[month repr:long] [year]")
+      ]
+    }
     
     pagebreak()
   }
 
   // Global typesetting settings
   
-
   let body-spacing = 20pt
 
   set text(size: 11pt, font: ("Cambria"))
@@ -331,6 +370,8 @@ long }
     })
     counter(page).update(2)
 
+    if doc-type == "thesis" {
+
     // ==========================================================
     // DECLARATION
     // ==========================================================
@@ -340,7 +381,6 @@ long }
 
     heading(outlined: false, numbering: none, "Declaration of Honor")
     include "chapters/frontmatter/declaration_of_honor.typ"
-  
 
     // ==========================================================
     // ABSTRACTS
@@ -366,10 +406,11 @@ long }
       acknowledgments
     }
 
+  }
+
     // ==========================================================
     // TABLE OF CONTENTS
     // ==========================================================
-    
 
     show outline.entry.where(level: 1): it => {
       if it.element.func() == heading {
@@ -408,9 +449,8 @@ long }
     )
     pagebreak()
 
-    //
     // LIST OF FIGURES (LoF)
-    //
+
     if show-list-of.contains("figures") {
       if (language == "de") {
         heading("Abbildungsverzeichnis", numbering: none, outlined: false)
@@ -420,9 +460,8 @@ long }
       outline(title: none, target: figure.where(kind: image))
     }
 
-    //
     // LIST OF TABLES (LoT)
-    //
+
     if show-list-of.contains("tables") {
       if (language == "de") {
         heading("Tabellenverzeichnis", numbering: none, outlined: false)
@@ -432,9 +471,8 @@ long }
       outline(title: none, target: figure.where(kind: table))
     }
 
-    //
     // LIST OF EQUATIONS (LoE)
-    //
+
     if show-list-of.contains("equations") {
       if (language == "de") {
         heading("Formelverzeichnis", numbering: none, outlined: false)
@@ -456,9 +494,8 @@ long }
     include "helpers/glossary.typ"
     }
 
-    //
     // LIST of LISTINGS LoL
-    //
+
     if show-list-of.contains("listings") {
       if (language == "de") {
         heading("Quellcodeverzeichnis", numbering: none, outlined: false)

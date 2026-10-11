@@ -7,30 +7,22 @@
 
 #show: doc => iee-thesis(
   // Metadata
-  title: "Your Thesis Title",
+  title: "Your Report Title",
   subtitle: "Optional Subtitle",
-  author: "Forename Surename",
+  authors: (
+    "Forename Surname",
+    "Second Author"
+  ),
   supervisors: (
     "Prof. Dr. Max Mustermann",
     "Dipl.-Ing. Jane Doe"
   ),
   
   // Program: PROGRAM_ECE, PROGRAM_MEC, PROGRAM_ECM, PROGRAM_STM, PROGRAM_EEM
-  program: PROGRAM_ECE, 
+  program: PROGRAM_ECM,
   language: "en", // "en" or "de"
-  doc-type: "thesis", // "thesis" or "report"
-  show-list-of: ("figures"),
-  
-  // Content from abstract.tex and acknowledgments.tex
-  abstract-de: [
-    #include "/chapters/frontmatter/abstract_de.typ"
-  ],
-  abstract-en: [
-    #include "/chapters/frontmatter/abstract_en.typ"
-  ],
-  acknowledgments: [
-    #include "/chapters/frontmatter/acknowledgments.typ"
-  ],
+  doc-type: "report", // "thesis" or "report" -> auto-selects the matching title page
+  show-list-of: (),
 
   doc
 )
