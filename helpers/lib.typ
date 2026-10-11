@@ -13,7 +13,7 @@
     inset: 20pt,
     radius: 4pt, // Approximating roundcorner
     width: 100%,
-    body
+    body,
   )
 }
 
@@ -34,8 +34,8 @@
   ])
 }
 
-#let directquote(it, bibkey:label, supplement:none, delimiter:["],enddelimiter:none) = {
-  if enddelimiter == none{ enddelimiter = delimiter}
+#let directquote(it, bibkey: label, supplement: none, delimiter: ["], enddelimiter: none) = {
+  if enddelimiter == none { enddelimiter = delimiter }
   [#delimiter#it#enddelimiter #cite(bibkey, supplement: supplement)]
 }
 
@@ -49,30 +49,32 @@
     //
     let theCode = it.text // contents -> string
     let lines = theCode.split("\n")
-    let fromLine = if firstline > lines.len() { lines.len() } else { firstline };
-    let toLine = if lastline > lines.len() { lines.len() } else { lastline };
+    let fromLine = if firstline > lines.len() { lines.len() } else { firstline }
+    let toLine = if lastline > lines.len() { lines.len() } else { lastline }
     lines = lines.slice(fromLine, toLine)
     set text(size: textsize)
     show raw.line: it => {
-        text(fill: gray)[#it.number]
-        h(1em)
-        if language=="console"{
-          show regex("^#.*"): set text(weight: "bold" )
-          show regex("^>.*"): set text(weight: "bold" )
-          text(fill:black,style: "normal", it.body)
-        }else{
-          it.body
-        }
+      text(fill: gray)[#it.number]
+      h(1em)
+      if language == "console" {
+        show regex("^#.*"): set text(weight: "bold")
+        show regex("^>.*"): set text(weight: "bold")
+        text(fill: black, style: "normal", it.body)
+      } else {
+        it.body
+      }
     }
     let txt = lines.join("\n")
     if txt != none {
       let r = raw(txt, lang: language)
       block(
-          radius: 0.5em, fill: luma(240),
-          width: 100%, inset: (x: 0.7em, y: 0.5em),
-          r
-        )
-    }else{
+        radius: 0.5em,
+        fill: luma(240),
+        width: 100%,
+        inset: (x: 0.7em, y: 0.5em),
+        r,
+      )
+    } else {
       todo("Err: Use arguments 'firstline' and 'lastline' to specify a non-empty part of source code.")
     }
   }
@@ -110,7 +112,7 @@
   even-row: rgb(255, 255, 255),
   odd-row: rgb(228, 234, 250),
   align: (col, row) => if row == 0 { center } else { left },
-  inset: (x: 0.5em, top: 0.3em, bottom: 0.9em)
+  inset: (x: 0.5em, top: 0.3em, bottom: 0.9em),
 ) = {
   let parsed = if type(tabledata) == str { csv(bytes(tabledata)) } else { tabledata }
   let tableheadings = parsed.first()
@@ -119,21 +121,20 @@
   {
     table(
       columns: col-widths,
-    
-    fill: (_, row) =>
-      if row == 0 {
+
+      fill: (_, row) => if row == 0 {
         header-row // color for header row
       } else if calc.odd(row) {
         odd-row // each other row colored
       } else {
         even-row
-    },
-    inset: inset,
-    stroke: 0.6pt, // + gray.darken(20%),
-    align: align,
-    ..tableheadings.map(x => [*#x*]), // bold headings
-    ..data,
-  )
+      },
+      inset: inset,
+      stroke: 0.6pt, // + gray.darken(20%),
+      align: align,
+      ..tableheadings.map(x => [*#x*]), // bold headings
+      ..data,
+    )
   }
 }
 
@@ -143,24 +144,24 @@
 #let fhjrevisionmark(content) = block(
   stroke: (right: 2pt + black.lighten(5%)),
   inset: (right: 6pt),
-  content
+  content,
 )
 
 // flowchart.typ
-#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge, shapes
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node, shapes
 
 #let flowchart(..steps) = {
   let items = steps.pos()
   let nodes = ()
   let y = 0
   let node-map = (:)
-  
+
   for item in items {
     if item.type == "node" or item.type == "decision" {
       if item.name != none {
         node-map.insert(item.name, y)
       }
-      
+
       let n = if item.name != none {
         node(
           (0, y),
@@ -185,16 +186,18 @@
           shape: if item.type == "decision" { shapes.diamond } else { rect },
         )
       }
-      
+
       nodes.push(n)
       y += 1
-      
     } else if item.type == "edge" {
       let from = if item.from != none { (0, node-map.at(item.from)) } else { none }
       let to = if item.to != none { (0, node-map.at(item.to)) } else { none }
-      
+
       if from != none and to != none {
-        nodes.push(edge(from, to, "-|>",
+        nodes.push(edge(
+          from,
+          to,
+          "-|>",
           label: item.label,
           label-pos: 0.5,
           label-sep: 0pt,
@@ -205,7 +208,9 @@
           bend: item.bend,
         ))
       } else {
-        nodes.push(edge("d", "-|>",
+        nodes.push(edge(
+          "d",
+          "-|>",
           label: item.label,
           label-pos: 0.5,
           label-sep: 0pt,
@@ -217,7 +222,7 @@
       }
     }
   }
-  
+
   align(center, pad(y: 15pt, diagram(
     spacing: (10mm, 15mm),
     ..nodes,

@@ -1,36 +1,31 @@
-#import "iee-template.typ": *
+#import "fhj-iee-template.typ": *
 #import "helpers/lib.typ": *
 
 // ==========================================================
 // USER CONFIGURATION
 // ==========================================================
 
-#show: doc => iee-thesis(
+#show: doc => fhj-iee-template(
   // Metadata
-  title: "Your Report Title",
+  title: "Laboratory Exercise Title",
   subtitle: "Optional Subtitle",
   authors: (
     "Forename Surname",
-    "Second Author"
+    "Second Author",
   ),
-  supervisors: (
-    "Prof. Dr. Max Mustermann",
-    "Dipl.-Ing. Jane Doe"
-  ),
-  
-  // Program: PROGRAM_ECE, PROGRAM_MEC, PROGRAM_ECM, PROGRAM_STM, PROGRAM_EEM
+
   program: PROGRAM_ECM,
-  language: "en", // "en" or "de"
-  doc-type: "report", // "thesis" or "report" -> auto-selects the matching title page
+  semester: "WS2026",
+  language: "en",
+  doc-type: "report",
   show-list-of: (),
 
-  doc
+  doc,
 )
 
-#include "chapters/introduction.typ"
 
-#include "chapters/methods.typ"
 
-#include "chapters/conclusion.typ"
-
-#bibliography("helpers/bib/ECEtempBib.bib", style: "ieee")
+= Title of the lab exercise
+== Task Description
+Describe the task here.
+== Schematic
