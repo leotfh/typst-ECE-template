@@ -360,7 +360,7 @@
   ): set figure.caption(position: top)
 
   //add more vertical space between text and start of figures
-  show figure: set block(inset: (top: 0.5em))
+  //show figure: set block(inset: (top: 0.5em))
 
   set figure(gap: 1.5em)
 
