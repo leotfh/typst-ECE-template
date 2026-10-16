@@ -13,7 +13,6 @@
     "Forename Surname",
     "Second Author",
   ),
-
   program: PROGRAM_ECM,
   semester: "WS2026",
   language: "en",

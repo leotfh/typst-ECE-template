@@ -83,7 +83,7 @@
     data.degree-type = if is-de { "am Bachelor-Studiengang" } else { "at the bachelor's degree programme" }
   } else if program == PROGRAM_ECM {
     data.org-text = get-program-name(program, lang: lang)
-    data.location = "Kapfenberg"
+    data.location = "Graz"
     data.degree-type = if is-de { "am Master-Studiengang" } else { "at the master's degree programme" }
   } else if program == PROGRAM_STM {
     data.org-text = get-program-name(program, lang: lang)
