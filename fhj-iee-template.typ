@@ -581,26 +581,21 @@
     }
 
     align(horizon, table(
-      columns: (1fr, 1fr),
+      columns: author-list.len(),
       stroke: 0pt,
-      align: (center, center),
+      align: center,
       inset: (top: 10pt, bottom: 10pt),
-      [#align(center, stack(
-        dir: ttb,
-        spacing: 10pt,
-        image("assets/graphics/others/signature_1.png", height: 10mm),
-        line(length: 100%),
-        if author-list.len() > 0 { author-list.at(0) } else { "" },
-        [#meta.location, #date.display("[day]. [month repr:long] [year]")],
-      ))],
-      [#align(center, stack(
-        dir: ttb,
-        spacing: 10pt,
-        image("assets/graphics/others/signature_2.png", height: 10mm),
-        line(length: 100%),
-        if author-list.len() > 1 { author-list.at(1) } else { "" },
-        [#meta.location, #date.display("[day]. [month repr:long] [year]")],
-      ))],
+      for (index, author) in author-list.enumerate() {
+        [#align(center, stack(
+          dir: ttb,
+          spacing: 10pt,
+          image("assets/graphics/others/signature_" + str(index + 1) + ".png", height: 10mm),
+          line(length: 100%,  stroke:0.5pt),
+          author,
+          [#meta.location, #date.display("[day]. [month repr:long] [year]")],
+        ))]
+        v(2.5em, weak: true)
+      }
     ))
   }
 }
