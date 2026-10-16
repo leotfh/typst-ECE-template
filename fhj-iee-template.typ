@@ -4,7 +4,6 @@
 // and the IIT Thesis Template by FH JOANNEUM (2026).
 // ==========================================================================
 
-
 // See https://github.com/typst/packages/tree/main/packages/preview/glossarium
 #import "@preview/glossarium:0.5.10": gls, glspl, make-glossary, register-glossary
 #import "helpers/glossary-definitions.typ": gls-entries
@@ -30,6 +29,8 @@
 #let PROGRAM_STM_NAME = "System Test Engineering" // Master
 #let PROGRAM_EEM = "EEM" // Master (English only usually)
 #let PROGRAM_EEM_NAME = "Electronic Engineering" // Master
+#let PROGRAM_ECM_ESE = "ESE" // Master
+#let PROGRAM_ECM_ESE_NAME = "Embedded Systems Engineering" // Master
 
 // ******************
 // Helper functionality: todo / quote / fhjcode / textit / textbf / fhjtable / ...
@@ -585,7 +586,9 @@
       stroke: 0pt,
       align: center,
       inset: (top: 10pt, bottom: 10pt),
-      ..author-list.enumerate().map(((index, author)) => table.cell(align(center, stack(
+      ..author-list
+        .enumerate()
+        .map(((index, author)) => table.cell(align(center, stack(
           dir: ttb,
           spacing: 10pt,
           image("assets/graphics/others/signature_" + str(index + 1) + ".png", height: 10mm),

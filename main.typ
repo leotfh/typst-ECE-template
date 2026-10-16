@@ -18,6 +18,7 @@
   language: "en",
   doc-type: "report",
   show-list-of: (),
+  // date: datetime(year: 2026, month: 10, day: 16)
 
   doc,
 )
