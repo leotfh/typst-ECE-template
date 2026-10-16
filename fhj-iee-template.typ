@@ -580,22 +580,19 @@
       heading(outlined: false, numbering: none, "Signatures")
     }
 
-    align(horizon, table(
-      columns: author-list.len(),
+    align(center, table(
+      columns: if author-list.len() == 1 { 1 } else { 2 },
       stroke: 0pt,
       align: center,
       inset: (top: 10pt, bottom: 10pt),
-      for (index, author) in author-list.enumerate() {
-        [#align(center, stack(
+      ..author-list.enumerate().map(((index, author)) => table.cell(align(center, stack(
           dir: ttb,
           spacing: 10pt,
           image("assets/graphics/others/signature_" + str(index + 1) + ".png", height: 10mm),
-          line(length: 100%,  stroke:0.5pt),
-          author,
+          line(length: if author-list.len() == 1 { 75% } else { 100% }, stroke: 0.5pt),
+          align(center, author),
           [#meta.location, #date.display("[day]. [month repr:long] [year]")],
-        ))]
-        v(2.5em, weak: true)
-      }
+        ))))
     ))
   }
 }
