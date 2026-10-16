@@ -1,7 +1,6 @@
 #import "@preview/mmdr:0.2.1": mermaid
 #import "@preview/rivet:0.3.0"
 #import "@preview/zap:0.5.0"
-#import "@preview/circuiteria:0.2.0"
 #import "@preview/chronos:0.3.0"
 
 // --- Helper: Blue Box (mdframed equivalent) ---
