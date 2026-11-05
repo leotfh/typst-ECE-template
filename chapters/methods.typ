@@ -1,4 +1,4 @@
-#import "../helpers/lib.typ": fhjtable, fhjcode  
+#import "../helpers/lib.typ": fhjcode, fhjtable
 
 // ==========================================================
 // CHAPTER 2: Methods
@@ -29,15 +29,18 @@ $ X(e^(j omega)) = pi e^(j phi) delta(omega - omega_0) + pi e^(-j phi) delta(ome
 In LaTeX, you used `split` or `eqnarray`. In Typst, we use `$` blocks with `&` alignment. Here is the complex error term equation from `Method.tex` (Eq 3.17):
 
 $
-  bb(E)_phi (e_c) &= sum_(h=1)^H A_h / A_bar(h) bb(E)(e^(j(phi_h - phi_bar(h)))) W(e^(j(omega_bar(h) - omega_h))) \
-  &+ sum_(h=1)^H A_h / A_bar(h) bb(E)(e^(-j(phi_h + phi_bar(h)))) W(e^(j(omega_bar(h) + omega_h))) \
-  &+ 1 / (pi A_bar(h)) bb(E)(e^(-j phi_bar(h))) D_w (e^(j omega_bar(h)))
+  bb(E)_phi (e_c) & = sum_(h=1)^H A_h / A_bar(h) bb(E)(e^(j(phi_h - phi_bar(h)))) W(e^(j(omega_bar(h) - omega_h))) \
+                  & + sum_(h=1)^H A_h / A_bar(h) bb(E)(e^(-j(phi_h + phi_bar(h)))) W(e^(j(omega_bar(h) + omega_h))) \
+                  & + 1 / (pi A_bar(h)) bb(E)(e^(-j phi_bar(h))) D_w (e^(j omega_bar(h)))
 $
 
-#figure(fhjtable(
-  tabledata: "A,B,C\n1,2,3\n4,5,6\n7,8,9",
-  columns: 3,
-), caption: "Example Table")
+#figure(
+  fhjtable(
+    tabledata: "A,B,C\n1,2,3\n4,5,6\n7,8,9",
+    columns: 3,
+  ),
+  caption: "Example Table",
+)
 
 #pagebreak()
 
@@ -51,9 +54,9 @@ Since Typst cannot compile `.tex` files directly, you should export your TikZ fi
 #figure(
   // image("figures/figure3_7.svg", width: 80%),
   rect(width: 80%, height: 5cm, fill: luma(240))[
-    #align(center+horizon)[*Placeholder for TikZ Figure 3.7*]
+    #align(center + horizon)[*Placeholder for TikZ Figure 3.7*]
   ],
-  caption: [Spectrogram consistency concept]
+  caption: [Spectrogram consistency concept],
 ) <figExOne>
 
 == List Structures

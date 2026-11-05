@@ -4,7 +4,7 @@
 This corresponds to `Discussion.tex`.
 Footnotes also work! #footnote(text("Test"))
 
-== Citations 
+== Citations
 Creating your own bibliography is important. In Typst, you link a .bib file at the end of the document. And reference entries using `#cite(key)` where `key` is the citation key defined in your .bib file or just use the \@ syntax. For example, you could reference this:
 @CMayerEtAl2018 , also reference this: @Okorn2017 or this: @Prechtl2006
 
@@ -21,8 +21,8 @@ Here is the cases equation example from `appendixA.tex`:
 
 $
   pi_q (k,l) = cases(
-    1 &quad G_q(k,l) > rho_text("th"),
-    0 &quad text("otherwise")
+    1 & quad G_q(k,l) > rho_text("th"),
+    0 & quad text("otherwise")
   )
 $
 
@@ -47,14 +47,14 @@ Three types of source codes are supported. Here is a C-code example (Listing 1.1
     }
     return 0;
   }
-  ```
+  ```,
 )
 
 == Tables
 
 #figure(
-  fhjtable(tabledata: csv("../assets/data/book1.csv", delimiter: ";"), columns: (auto, 1fr, 1fr, 1fr)), 
-  caption: [Example Table]
+  fhjtable(tabledata: csv("../assets/data/Bode_HochTief.csv", delimiter: ";"), columns: (auto, 1fr, 1fr, 1fr)),
+  caption: [Example Table],
 )
 
 #pagebreak()
